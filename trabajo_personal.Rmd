@@ -1,0 +1,63 @@
+---
+title: "Trabajo_Personal"
+author: "Jon Santamaria"
+date: "1/24/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Para poder realizar el trabajo, en primer lugar instalamos el paquete nycflights13
+```{r}
+install.packages("nycflights13")
+library(nycflights13)
+```
+1. Encuentra todos los vuelos que llegaron más de una hora tarde de lo previsto.
+```{r}
+vuelos= nycflights13::flights
+vuelos_buenos= vuelos[complete.cases(vuelos),]
+?flights
+
+retrasos= vuelos[which(vuelos$arr_delay> 60), ]
+a=dim(retrasos)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que llegaron con retraso"))
+```
+2. Encuentra todos los vuelos que volaron hacia San Francisco (aeropuertos SFO y OAK)
+```{r}
+vSF= vuelos[vuelos$dest== "SFO" | vuelos$dest== "OAK",]
+a=dim(vSF)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que volaron hacia San Francisco"))
+```
+3. Encuentra todos los vuelos operados por United American (UA) o por American Airlines (AA)
+```{r}
+vOp= vuelos[vuelos$carrier == "UA" | vuelos$carrier == "AA",]
+a=dim(vOp)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que volaron operados por United American (UA) o por American Airlines (AA)"))
+```
+4. Encuentra todos los vuelos que salieron los meses de primavera (Abril, Mayo y Junio)
+```{r}
+vPrim= vuelos[vuelos$month=="4" | vuelos$month=="5" | vuelos$month=="6",]
+a=dim(vPrim)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que volaron en los meses de primavera"))
+```
+5. Encuentra todos los vuelos que llegaron más de una hora tarde pero salieron con menos de una hora de retraso.
+```{r}
+retrasados2= vuelos[which(vuelos$arr_delay> 60 & vuelos$dep_delay< 60), ]
+a=dim(retrasados2)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que llegaron con mas de una hora de retraso y salieron con menos de una hora de retraso"))
+```
+6. Encuentra todos los vuelos que salieron con más de una hora de retraso pero consiguieron llegar con menos de 30 minutos de retraso (el avión aceleró en el aire)
+```{r}
+retrasados3= vuelos[which(vuelos$arr_delay< 30 & vuelos$dep_delay> 60), ]
+a=dim(retrasados3)
+a[1]
+print(paste0("Hay ", a[1], " vuelos que llegaron con menos de 30 minutos de retraso y salieron con más de una hora de retraso"))
+```
+
