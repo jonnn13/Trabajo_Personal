@@ -60,4 +60,18 @@ a=dim(retrasados3)
 a[1]
 print(paste0("Hay ", a[1], " vuelos que llegaron con menos de 30 minutos de retraso y salieron con más de una hora de retraso"))
 ```
+7. Encuentra todos los vuelos que salen entre medianoche y las 7 de la mañana (vuelos nocturnos).
+```{r}
+vnocturnos= vuelos[which(vuelos$hour>=0 & vuelos$hour<=7 ),]
+a=dim(vnocturnos)
+a[1]
+print(paste0("Hay ", a[1], " vuelos nocturnos"))
+```
+8. ¿Cuántos vuelos tienen un valor desconocido de dep_time?
+```{r}
+vNA= vuelos[is.na(vuelos$dep_time),]
+a=dim(vNA)
+a[1]
+print(paste0("Hay ", a[1], " vuelos con valores desconocidos"))
+```
 

@@ -46,4 +46,16 @@ a=dim(vnocturnos)
 a[1]
 print(paste0("Hay ", a[1], " vuelos nocturnos"))
 
+vNA= vuelos[is.na(vuelos$dep_time),]
+a=dim(vNA)
+a[1]
+print(paste0("Hay ", a[1], " vuelos con valores desconocidos"))
+
+
+#ejercicio 9
+var_desc= vuelos[is.na(vuelos),is.na(vuelos)]
+var_desc=is.na.data.frame(vuelos)
+
+
+vordenados= arrange(vuelos_NA, desc(dep_delay))
 
