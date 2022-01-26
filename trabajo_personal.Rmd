@@ -74,4 +74,114 @@ a=dim(vNA)
 a[1]
 print(paste0("Hay ", a[1], " vuelos con valores desconocidos"))
 ```
+9. ¿Qué variables del dataset contienen valores desconocidos?
+```{r}
+apply(X=is.na(vuelos), MARGIN= 2, FUN=sum)
+print("Las variables que tienen valores desconocidos son: dep_time, dep_delay, arr_time, arr_delay, tailnum y air_time")
+
+```
+10. Ordena los vuelos de flights para encontrar los vuelos más retrasados en la salida. ¿Qué vuelos fueron los que salieron los primeros antes de lo previsto?
+```{r}
+# Los más retrasados
+vordenados= vuelos[order(vuelos$dep_delay, na.last = F),]
+tail(vordenados)
+# Los mas adelantados
+v_adelantados=vuelos[order(vuelos$dep_delay),]
+head(v_adelantados)
+```
+11. Ordena los vuelos de flights para encontrar los vuelos más rápidos. Usa el concepto de rapidez que consideres.
+```{r}
+vuelos$velocidad=(vuelos$distance/vuelos$air_time)
+v_rap=vuelos[order(vuelos$velocidad, na.last = F),]
+# Estos son los vuelos más rápidos basandonos en la velocidad
+tail(v_rap)
+```
+12. ¿Qué vuelos tienen los trayectos más largos?
+```{r}
+v_trayecto=vuelos_buenos[order(vuelos_buenos$distance, decreasing = T),]
+head(v_trayecto)
+```
+13. ¿Qué vuelos tienen los trayectos más cortos?
+```{r}
+tail(v_trayecto)
+```
+14. El dataset de vuelos tiene dos variables, dep_time y sched_dep_time muy útiles pero difíciles de usar por cómo vienen dadas al no ser variables continuas. Fíjate que cuando pone 559, se refiere a que el vuelo salió a las 5:59... Convierte este dato en otro más útil que represente el número de minutos que pasan desde media noche.
+```{r}
+vuelos$dep_time_min= (vuelos$dep_time %/%100*60 + vuelos$dep_time %%100)
+vuelos$sched_dep_time_min= (vuelos$sched_dep_time %/%100*60 + vuelos$sched_dep_time %%100)
+print("Hemos creado dos columnas dividiendo los valores entre 100 para poder multipicar por 60 el valor que quedaba por delante de la coma, que es el que corresponde a las horas. De esta manera, sumando los minutos correspondientes a los valores de la derecha de la coma con los minutos calculados a partir de las horas, obtenemos el tiempo total en minutos")
+```
+15. Compara los valores de dep_time, sched_dep_time y dep_delay. ¿Cómo deberían relacionarse estos tres números? Compruébalo y haz las correcciones numéricas que necesitas.
+```{r}
+
+```
+16. Investiga si existe algún patrón del número de vuelos que se cancelan cada día.
+```{r}
+cancelado_por_dia <- 
+  vuelos %>%
+  mutate(cancelado = (is.na(arr_delay) | is.na(dep_delay))) %>%
+  group_by(year, month, day) %>%
+  summarise(
+    cancelado_num = sum(cancelado),
+    flights_num = n(),
+  )
+
+ggplot(cancelado_por_dia) +
+  geom_point(aes(x = flights_num, y = cancelado_num))
+print("A medida que aumentan el número de vuelos en un día, aumenta el número de cancelaciones")
+
+```
+17. Investiga si la proporción de vuelos cancelados está relacionada con el retraso promedio por día en los vuelos.
+```{r}
+
+```
+18. Investiga si la proporción de vuelos cancelados está relacionada con el retraso promedio por aeropuerto en los vuelos.
+```{r}
+
+```
+19. ¿Qué compañía aérea sufre los peores retrasos?
+```{r}
+vuelos %>%
+  group_by(carrier) %>%
+  summarise(arr_delay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(desc(arr_delay))
+
+vuelos %>%
+  group_by(carrier) %>%
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+  arrange(desc(dep_delay))
+print("La F9 es la que más se retrasa tanto en salidas como en llegadas")
+```
+20. Queremos saber qué hora del día nos conviene volar si queremos evitar los retrasos en la salida.
+```{r}
+vuelos %>%
+  group_by(hour) %>%
+  summarise(arr_delay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(arr_delay)
+print("Para evitar los retrasos en la salida la mejor hora para volar son las 5 de la mañana")
+```
+21. Queremos saber qué día de la semana nos conviene volar si queremos evitar los retrasos en la salida.
+```{r}
+
+```
+22. Para cada destino, calcula el total de minutos de retraso acumulado.
+```{r}
+
+```
+23. Para cada uno de ellos, calcula la proporción del total de retraso para dicho destino.
+```{r}
+
+```
+24. Es hora de aplicar todo lo que hemos aprendido para visualizar mejor los tiempos de salida para vuelos cancelados vs los no cancelados. Recuerda bien qué tipo de dato tenemos en cada caso. ¿Qué deduces acerca de los retrasos según la hora del día a la que está programada el vuelo de salida?
+```{r}
+
+```
+25. Subir la carpeta a github y facilitar la url.
+```{r}
+
+```
+26. Al finalizar el documento agrega el comando sessionInfo()
+```{r}
+
+```
 
