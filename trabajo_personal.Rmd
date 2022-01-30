@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 Para poder realizar el trabajo, en primer lugar instalamos el paquete nycflights13
 ```{r}
 library(nycflights13)
+library(lubridate)
+library(tidyverse)
 ```
 1. Encuentra todos los vuelos que llegaron más de una hora tarde de lo previsto.
 ```{r}
@@ -119,8 +121,7 @@ print("Podemos correctamente la relaciones entre estas varibales en 327314 vuelo
 ```
 16. Investiga si existe algún patrón del número de vuelos que se cancelan cada día.
 ```{r}
-cancelado_por_dia <- 
-  vuelos %>%
+cancelado_por_dia <- vuelos %>%
   mutate(cancelado = (is.na(arr_delay) | is.na(dep_delay))) %>%
   group_by(year, month, day) %>%
   summarise(
